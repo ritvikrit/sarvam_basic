@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Sarvam Voice Assistant</title>
+</head>
+
+<body>
+
+    <h1>Sarvam TTS</h1>
+
+    <input type="text" id="textInput" placeholder="Enter text">
+
+    <button onclick="generateSpeech()">
+        Generate Speech
+    </button>
+
+    <br><br>
+
+    <audio id="audioPlayer" controls></audio>
+
+    <script>
+
+        async function generateSpeech() {
+
+            const text = document.getElementById("textInput").value;
+
+            const response = await fetch(
+                "http://127.0.0.1:8000/tts",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        text: text
+                    })
+                }
+            );
+
+            const audioBlob = await response.blob();
+
+            const audioURL = URL.createObjectURL(audioBlob);
+
+            const audioPlayer =
+                document.getElementById("audioPlayer");
+
+            audioPlayer.src = audioURL;
+
+            audioPlayer.play();
+        }
+
+    </script>
+
+</body>
+
+</html>
